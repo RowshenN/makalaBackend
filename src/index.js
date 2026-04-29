@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const sequelize = require("./config/db");
@@ -32,7 +33,7 @@ app.use("/upload", express.static(path.join(__dirname, "upload")));
 // ✅ start server ONLY after DB is ready
 const startServer = async () => {
   try {
-    const uploadDir = path.join(__dirname, "src", "upload");
+    const uploadDir = path.join(__dirname, "upload");
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
