@@ -13,6 +13,7 @@ const categoryRoutes = require("./routes/category.routes");
 const magazineRoutes = require("./routes/magazine.routes");
 const issueRoutes = require("./routes/issue.routes");
 const authorRoutes = require("./routes/author.routes");
+const { PORT } = require("./config/env");
 
 // middlewares
 app.use(cors());
@@ -42,7 +43,7 @@ const startServer = async () => {
     console.log("Database connected ✅");
 
     await sequelize.sync({ alter: true });
-    app.listen(5000, () => {
+    app.listen(PORT, () => {
       console.log("Server running on port 5000 🚀");
     });
   } catch (error) {

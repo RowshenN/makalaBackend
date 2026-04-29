@@ -1,12 +1,17 @@
 const { Sequelize } = require("sequelize");
+const { DB_URL } = require("./env");
 
 const sequelize = new Sequelize(
-  "magazine",     // database namee
-  "postgres",     // username
-  "5432",     // password
+  DB_URL,
   {
-    host: "localhost",
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false 
+      }
+    },
+    logging: false
   }
 );
 
