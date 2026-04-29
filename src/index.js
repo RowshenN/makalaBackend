@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./config/db");
 const path = require("path");
-
+const fs = require("fs");
 const app = express();
 
 const uploadRoutes = require("./routes/upload.routes");
@@ -31,6 +31,13 @@ app.use("/upload", express.static(path.join(__dirname, "upload")));
 // ✅ start server ONLY after DB is ready
 const startServer = async () => {
   try {
+    const uploadDir = path.join(__dirname, "src", "upload");
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      console.log("Upload directory created 📁");
+    }
+
     await sequelize.authenticate();
     console.log("Database connected ✅");
 
