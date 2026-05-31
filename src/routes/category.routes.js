@@ -8,11 +8,13 @@ const {
   deleteCategory,
   getCategoryById,
 } = require("../controllers/category.controller");
+const { authorizeByPermission } = require("../middleware/authorizeByPermission");
 
-router.post("/", createCategory);
-router.get("/", getCategories);
-router.get("/:id", getCategoryById);
-router.put("/:id", updateCategory);
-router.delete("/:id", deleteCategory); 
+router.get("/", authorizeByPermission("category:list"), getCategories);
+router.get("/:id", authorizeByPermission("category:view"), getCategoryById);
+
+router.post("/", authorizeByPermission("category:create"), createCategory);
+router.put("/:id", authorizeByPermission("category:update"), updateCategory);
+router.delete("/:id", authorizeByPermission("category:delete"), deleteCategory);
 
 module.exports = router;
