@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Issue, Category, Magazine, Article } = require("../models");
+const { API_URL } = require("../config/config");
 
 // ✅ CREATE ISSUE
 exports.createIssue = async (req, res) => {
@@ -16,11 +17,11 @@ exports.createIssue = async (req, res) => {
     } = req.body;
 
     const image = req.files?.image
-      ? `http://localhost:5000/upload/${req.files.image[0].filename}`
+      ? `${API_URL}upload/${req.files.image[0].filename}`
       : null;
 
     const pdf = req.files?.pdf
-      ? `http://localhost:5000/upload/${req.files.pdf[0].filename}`
+      ? `${API_URL}upload/${req.files.pdf[0].filename}`
       : null;
 
     const issue = await Issue.create({
@@ -218,11 +219,11 @@ exports.updateIssue = async (req, res) => {
     let pdf = issue.pdf;
 
     if (req.files?.image) {
-      image = `http://localhost:5000/upload/${req.files.image[0].filename}`;
+      image = `${API_URL}upload/${req.files.image[0].filename}`;
     }
 
     if (req.files?.pdf) {
-      pdf = `http://localhost:5000/upload/${req.files.pdf[0].filename}`;
+      pdf = `${API_URL}upload/${req.files.pdf[0].filename}`;
     }
 
 

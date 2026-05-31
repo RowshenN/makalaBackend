@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload");
+const { API_URL } = require("../config/config");
 
 // ✅ ONLY FOR IMAGE UPLOAD (TipTap)
 router.post("/", upload.single("image"), (req, res) => {
@@ -9,7 +10,7 @@ router.post("/", upload.single("image"), (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const url = `http://localhost:5000/upload/${req.file.filename}`;
+    const url = `${API_URL}upload/${req.file.filename}`;
 
     res.json({ url }); // ✅ IMPORTANT
   } catch (error) {

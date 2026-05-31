@@ -1,3 +1,4 @@
+const { API_URL } = require("../config/config");
 const { Article, Issue, Category, Author, Magazine } = require("../models");
 const { Op } = require("sequelize");
 
@@ -10,6 +11,27 @@ const slugify = (text) => {
 };
 
 // ✅ CREATE ARTICLE
+// exports.createArticle = async (req, res) => {
+//   try {
+//     const { title, content, issueId, categoryId, authorId } = req.body;
+
+//     const slug = slugify(title);
+
+//     const article = await Article.create({
+//       title,
+//       slug,
+//       content,
+//       issueId,
+//       categoryId,
+//       authorId,
+//     });
+
+//     res.status(201).json(article);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: `Error creating article :  ${error}` });
+//   }
+// };
 exports.createArticle = async (req, res) => {
   try {
     const { title, content, issueId, categoryId, authorId } = req.body;
@@ -20,7 +42,8 @@ exports.createArticle = async (req, res) => {
       title,
       slug,
       content,
-      issueId,
+      // If issueId is an empty string or missing, set it to null
+      issueId: issueId || null, 
       categoryId,
       authorId,
     });
@@ -28,12 +51,12 @@ exports.createArticle = async (req, res) => {
     res.status(201).json(article);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: `Error creating article :  ${error}` });
+    res.status(500).json({ message: `Error creating article: ${error.message}` });
   }
 };
 
-// ✅ GET ALL ARTICLES
 
+// ✅ GET ALL ARTICLES
 exports.getArticles = async (req, res) => {
   try {
     const { search, categoryId, year, week, magazineId } = req.query;
@@ -182,7 +205,7 @@ exports.updateArticle = async (req, res) => {
     let image = article.image;
 
     if (req.file) {
-      image = `http://localhost:5000/upload/${req.file.filename}`;
+      image = `${API_URL}upload/${req.file.filename}`;
     }
 
     if (req.body.removeImage === "true") {
