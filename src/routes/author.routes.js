@@ -8,11 +8,13 @@ const {
   updateAuthor,
   deleteAuthor,
 } = require("../controllers/author.controller");
+const { authorizeByPermission } = require("../middleware/authorizeByPermission");
 
-router.post("/", createAuthor);
-router.get("/", getAuthors);
-router.get("/:id", getAuthorById);
-router.put("/:id", updateAuthor);
-router.delete("/:id", deleteAuthor);
+router.get("/", authorizeByPermission("author:list"), getAuthors);
+router.get("/:id", authorizeByPermission("author:view"), getAuthorById);
+
+router.post("/", authorizeByPermission("author:create"), createAuthor);
+router.put("/:id", authorizeByPermission("author:update"), updateAuthor);
+router.delete("/:id", authorizeByPermission("author:delete"), deleteAuthor);
 
 module.exports = router;

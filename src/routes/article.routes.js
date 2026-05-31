@@ -9,20 +9,18 @@ const {
   deleteArticle,
   getLatestArticles,
   getThisWeekArticles,
-  getArticleById
+  getArticleById,
 } = require("../controllers/article.controller");
+const { authorizeByPermission } = require("../middleware/authorizeByPermission");
 
-router.post("/", createArticle);
-router.get("/", getArticles);
+router.get("/", authorizeByPermission("article:list"), getArticles);
+router.get("/latest", authorizeByPermission("article:list"), getLatestArticles);
+router.get("/this-week", authorizeByPermission("article:list"), getThisWeekArticles);
+router.get("/id/:id", authorizeByPermission("article:view"), getArticleById);
+router.get("/:slug", authorizeByPermission("article:view"), getArticleBySlug);
 
-router.get("/latest", getLatestArticles);
-router.get("/this-week", getThisWeekArticles);
-
-// 🔥 SEO route
-router.get("/id/:id", getArticleById);
-router.get("/:slug", getArticleBySlug);
-
-router.put("/:id", updateArticle);
-router.delete("/:id", deleteArticle);
+router.post("/", authorizeByPermission("article:create"), createArticle);
+router.put("/:id", authorizeByPermission("article:update"), updateArticle);
+router.delete("/:id", authorizeByPermission("article:delete"), deleteArticle);
 
 module.exports = router;
